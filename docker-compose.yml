@@ -16,8 +16,9 @@ services:
             - LOAD_EX=n
             - EXECUTOR=Local
         volumes:
-            - ./dags:/usr/local/airflow/dags
-            - ./plugins:/usr/local/airflow/plugins
+            - ./dags:/usr/local/airflow/gcs/dags
+            - ./plugins:/usr/local/airflow/gcs/plugins
+            - ./data:/usr/local/airflow/gcs/data
         ports:
             - "8080:8080"
         command: webserver
@@ -26,3 +27,13 @@ services:
             interval: 30s
             timeout: 30s
             retries: 3
+
+    jupyter:
+        build: ./jupyter
+        #build: beakerx/beakerx
+        ports:
+            - "8888:8888"
+        volumes:
+            - ./dags:/home/jovyan/work/dags
+            - ./plugins:/home/jovyan/work/plugins
+            - ./data:/home/jovyan/work/data

@@ -1,0 +1,22 @@
+#state files
+state.json
+
+#zip files
+*.zip
+
+#Jupyter notebooks
+*.ipynb*
+
+#compiled python
+*.pyc
+
+# data files
+*.feather
+*.csv
+*.Rda
+
+# data folder's conntents
+data/*
+
+#system files
+*.DS_store

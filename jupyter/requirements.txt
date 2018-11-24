@@ -1,0 +1,11 @@
+ipython
+ipykernel
+kernda
+pandas
+requests
+configparser
+google-api-python-client
+# apache-airflow
+feather-format
+numpy
+pytz

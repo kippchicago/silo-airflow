@@ -56,8 +56,13 @@ RUN set -ex \
     && pip install pyOpenSSL \
     && pip install ndg-httpsclient \
     && pip install pyasn1 \
-    && pip install apache-airflow[crypto,celery,postgres,hive,jdbc,mysql]==$AIRFLOW_VERSION \
+    #&& pip install apache-airflow[crypto,celery,postgres,hive,jdbc,mysql]==$AIRFLOW_VERSION \
+    && pip install apache-airflow[celery,postgres,hive,jdbc]==$AIRFLOW_VERSION \
     && pip install celery[redis]==4.1.1 \
+    && pip install google-api-python-client \
+    && pip install oauth2client \
+    && pip install feather-format \
+    && pip install pandas_gbq \
     && apt-get purge --auto-remove -yqq $buildDeps \
     && apt-get autoremove -yqq --purge \
     && apt-get clean \
@@ -77,6 +82,7 @@ RUN chown -R airflow: ${AIRFLOW_HOME}
 EXPOSE 8080 5555 8793
 
 USER airflow
-WORKDIR ${AIRFLOW_HOME}
+WORKDIR /usr/local/airflow
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["webserver"] # set default arg for entrypoint
+# set default arg for entrypoint
+CMD ["webserver"]

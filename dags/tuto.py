@@ -44,5 +44,14 @@ t3 = BashOperator(
     dag=dag,
 )
 
+t4 = BashOperator(
+    task_id="templated_2",
+    bash_command=templated_command,
+    params={"my_param": "Parameter I passed in (2)"},
+    dag=dag,
+)
+
+
 t2.set_upstream(t1)
 t3.set_upstream(t1)
+t4.set_upstream(t1)
