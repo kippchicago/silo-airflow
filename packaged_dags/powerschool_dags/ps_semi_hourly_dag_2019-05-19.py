@@ -24,22 +24,10 @@ MAXPAGESIZE = 1000
 STATE_FILEPATH = '{0}/gcs/data/'.format(home) + 'state.json'
 
 
-#client_id = '7d2606ef-c59c-493b-811e-12252b1e2794'
-#client_secret = '7f7ff316-0535-4f36-a63f-f4c40d54a462'
-
 client_id = Variable.get("ps_client_id")
 client_secret = Variable.get("ps_client_secret")
 credentials_concat = '{0}:{1}'.format(client_id, client_secret)
 CREDENTIALS_ENCODED = base64.b64encode(credentials_concat.encode('utf-8'))
-
-
-#def get_access_token(base_url=BASE_URL, credentials_encoded=CREDENTIALS_ENCODED):
-#def get_table_count(table_name, query, headers, base_url=BASE_URL, maxpagesize=MAXPAGESIZE):
-#def get_table_data(table_name, query, pages, table_columns, headers, base_url=BASE_URL, maxpagesize=MAXPAGESIZE):
-
-
-#endpoint_name = 'silo_hourly_endpoints'
-#ENDPOINT_PATH = '{0}/gcs/data/endpoints/{1}.json'.format(home, endpoint_name)
 
 endpoints = [{"table_name":"attendance","query_expression":"yearid==28","projection":"dcid,id,attendance_codeid,calendar_dayid,schoolid,yearid,studentid,ccid,periodid,parent_attendanceid,att_mode_code,att_comment,att_interval,prog_crse_type,lock_teacher_yn,lock_reporting_yn,transaction_type,total_minutes,att_date,ada_value_code,ada_value_time,adm_value,programid,att_flags,whomodifiedid,whomodifiedtype,ip_address"}]
 
@@ -51,12 +39,12 @@ endpoints = [{"table_name":"attendance","query_expression":"yearid==28","project
 default_args = {
     "owner": "airflow",
     "depends_on_past": False,
-    "start_date": datetime(2018, 8, 27),
-    "email": ["airflow@airflow.com"],
-    "email_on_failure": False,
+    "start_date": datetime(2019, 5, 19),
+    "email": ["chaid@kippchicago.org"],
+    "email_on_failure": True,
     "email_on_retry": False,
     "retries": 2,
-    "retry_delay": timedelta(minutes=5),
+    "retry_delay": timedelta(minutes=30),
     "provide_context": True
     # 'queue': 'bash_queue',
     # 'pool': 'backfill',
@@ -65,9 +53,10 @@ default_args = {
 }
 
 dag = DAG(
-    "silo_ps_hourly_endpoints",
+    "silo_ps_semi_hourly_endpoints_2019-05-20",
     default_args=default_args,
-    schedule_interval='0 * * * *')
+    schedule_interval='0 0/4 * * *'
+)
 
 t1 = PythonOperator(task_id = "get_state",
                     python_callable = get_state,
@@ -96,7 +85,8 @@ for i, e in enumerate(endpoints):
             task_id = get_enpdpoints_task_id,
             python_callable = get_endpoints,
             op_args = [e, SAVE_PATH, BASE_URL, MAXPAGESIZE],
-            dag = dag
+            dag = dag,
+            execution_timeout=timedelta(hours=3)
             )
 
     logging.info("Sending endoint {0} to GCS".format(endpoint_name))

@@ -478,7 +478,7 @@ class BigQueryTableModifiedSensor(BaseSensorOperator):
 class IdeaPlugin(AirflowPlugin):
     name = "idea_plugin"
     operators = [BigQueryToFeatherOperator,
-                BigQueryTableModifiedSensor,
                 CreateAttendStudentOperator,
                 CreateGroupedAttendance,
                 GroupedADAToGroupedYTDOperator]
+    sensors = [BigQueryTableModifiedSensor]

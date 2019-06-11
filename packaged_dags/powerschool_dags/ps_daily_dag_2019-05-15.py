@@ -53,7 +53,8 @@ endpoints = [
     {"table_name":"cc", "query_expression":"termid=ge=2800;termid=lt=2900",
       "projection":"dateleft,schoolid,termid,period_obsolete,attendance_type_code,unused2,currentabsences,currenttardies,attendance,teacherid,lastgradeupdate,section_number,course_number,origsectionid,unused3,teachercomment,lastattmod,asmtscores,firstattdate,finalgrades,studyear,log,expression,studentsectenrl_guid,teacherprivatenote,ab_course_cmp_fun_flg,ab_course_cmp_ext_crd,ab_course_cmp_met_cd,ab_course_eva_pro_cd,ab_course_cmp_sta_cd,dcid,id,studentid,sectionid,dateenrolled"},
     {"table_name":"cc", "query_expression":"termid=gt=-2900;termid=le=-2800",
-     "projection":"dateleft,schoolid,termid,period_obsolete,attendance_type_code,unused2,currentabsences,currenttardies,attendance,teacherid,lastgradeupdate,section_number,course_number,origsectionid,unused3,teachercomment,lastattmod,asmtscores,firstattdate,finalgrades,studyear,log,expression,studentsectenrl_guid,teacherprivatenote,ab_course_cmp_fun_flg,ab_course_cmp_ext_crd,ab_course_cmp_met_cd,ab_course_eva_pro_cd,ab_course_cmp_sta_cd,dcid,id,studentid,sectionid,dateenrolled"}
+     "projection":"dateleft,schoolid,termid,period_obsolete,attendance_type_code,unused2,currentabsences,currenttardies,attendance,teacherid,lastgradeupdate,section_number,course_number,origsectionid,unused3,teachercomment,lastattmod,asmtscores,firstattdate,finalgrades,studyear,log,expression,studentsectenrl_guid,teacherprivatenote,ab_course_cmp_fun_flg,ab_course_cmp_ext_crd,ab_course_cmp_met_cd,ab_course_eva_pro_cd,ab_course_cmp_sta_cd,dcid,id,studentid,sectionid,dateenrolled"},
+    {"table_name":"storedgrades", "query_expression":"termid=ge=2700;termid=lt=2800", "projection":"gpa_addedvalue,gpa_custom2,excludefromclassrank,excludefromhonorroll,gpa_custom1,ab_course_cmp_fun_flg,ab_course_cmp_ext_crd,ab_course_cmp_fun_sch,ab_course_cmp_met_cd,ab_course_eva_pro_cd,ab_course_cmp_sta_cd,ab_pri_del_met_cd,ab_lng_cd,ab_dipl_exam_mark,ab_final_mark,isearnedcrhrsfromgb,ispotentialcrhrsfromgb,termbinsname,replaced_grade,excludefromtranscripts,replaced_dcid,excludefromgraduation,excludefromgradesuppression,replaced_equivalent_course,gradereplacementpolicy_id,dcid,studentid,sectionid,termid,storecode,datestored,grade,percent,absences,tardies,behavior,potentialcrhrs,earnedcrhrs,comment_value,course_name,course_number,credit_type,grade_level,schoolid,log,course_equiv,schoolname,gradescale_name,teacher_name,excludefromgpa,gpa_points"}
 ]
 
 
@@ -64,12 +65,12 @@ endpoints = [
 default_args = {
     "owner": "airflow",
     "depends_on_past": False,
-    "start_date": datetime(2018, 9, 19),
+    "start_date": datetime(2019, 5, 16),
     "email": ["chrishiad@kippchicago.com"],
     "email_on_failure": True,
     "email_on_retry": False,
     "retries": 2,
-    "retry_delay": timedelta(minutes=5),
+    "retry_delay": timedelta(minutes=30),
     "provide_context": True
     # 'queue': 'bash_queue',
     # 'pool': 'backfill',
@@ -78,7 +79,7 @@ default_args = {
 }
 
 dag = DAG(
-    "silo_ps_daily_endpoints",
+    "silo_ps_daily_endpoints_2019-05-15",
     default_args=default_args,
     schedule_interval='30 12 * * *')
 
