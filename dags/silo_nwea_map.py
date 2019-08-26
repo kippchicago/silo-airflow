@@ -7,7 +7,7 @@
 # * `NWEA_API_ENDPOINT`: NWEA endpoint for cdf
 # * `NWEA_UID`: uid for nwea user that hosts the CDF (updates daily)
 # * `NWEA_PWD`: password for nwea user that hosts the CDF (updates daily)
-from __future__ import division, unicode_literals
+#from __future__ import division, unicode_literals
 import requests
 import pandas as pd
 import zipfile
@@ -79,7 +79,7 @@ Airflow specific DAG set up #
 default_args = {
     "owner": "airflow",
     "depends_on_past": False,
-    "start_date": datetime(2018, 11, 16),
+    "start_date": datetime(2019, 8, 26),
     "email": ["chaid@kippchicago.org"],
     "email_on_failure": True,
     "email_on_retry": False,
@@ -94,7 +94,7 @@ default_args = {
 
 
 dag = DAG(
-    "silo_nwea_map_daily_2018_11-16",
+    "silo_nwea_map_daily_2019-08-26",
     default_args=default_args,
     schedule_interval='*/15 9-12 * * *',
     catchup = False)

@@ -1,4 +1,4 @@
-from __future__ import division, unicode_literals
+#from __future__ import division, unicode_literals
 
 from datetime import datetime, timedelta, date
 
@@ -63,7 +63,7 @@ Test Dag for IDEA plugin
 default_args = {
     "owner": "airflow",
     "depends_on_past": False,
-    "start_date": datetime(2018, 10, 31),
+    "start_date": datetime(2019, 8, 26),
     "email": ["chaid@kippchicago.org"],
     "email_on_failure": True,
     "email_on_retry": False,
@@ -161,7 +161,7 @@ def get_current_stus_ada(save_path, **context):
 
 
 dag = DAG(
-    "idea_ops_attendance_dashboard_2018-11-05",
+    "idea_ops_attendance_dashboard_2019-08-26",
     default_args=default_args,
     schedule_interval='0 6/3 * * *',
     catchup = False)

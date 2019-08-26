@@ -17,7 +17,8 @@ import ast
 from airflow.models import BaseOperator, Variable
 from airflow.plugins_manager import AirflowPlugin
 from airflow.contrib.hooks.bigquery_hook import BigQueryHook
-from airflow.operators.sensors import BaseSensorOperator
+#from airflow.operators.sensors import BaseSensorOperator
+from airflow.sensors.base_sensor_operator import BaseSensorOperator
 from airflow.utils.decorators import apply_defaults
 
 

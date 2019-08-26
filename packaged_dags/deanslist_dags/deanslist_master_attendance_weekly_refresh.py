@@ -50,7 +50,7 @@ API_KEYS = ast.literal_eval(API_KEYS)
 
 def datetime_range(start=None, end=None):
     span = end - start
-    for i in xrange(span.days + 1):
+    for i in range(span.days + 1):
         yield start + timedelta(days=i)
 
 end_date = datetime.today()
@@ -65,7 +65,7 @@ Airflow specific DAG set up #
 default_args = {
     "owner": "airflow",
     "depends_on_past": False,
-    "start_date": datetime(2018, 11, 10),
+    "start_date": datetime(2019, 8, 19),
     "email": ["chaid@kippchicago.org"],
     "email_on_failure": True,
     "email_on_retry": False,
@@ -80,7 +80,7 @@ default_args = {
 
 
 dag = DAG(
-    "silo_dl_weekly_master_attendance_2018-11-10",
+    "silo_dl_weekly_master_attendance_2018-08-19",
     default_args=default_args,
     schedule_interval='0 6 * * 0',
     catchup = False)

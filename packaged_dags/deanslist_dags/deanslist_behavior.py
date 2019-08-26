@@ -71,7 +71,7 @@ Airflow specific DAG set up #
 default_args = {
     "owner": "airflow",
     "depends_on_past": False,
-    "start_date": datetime(2016, 8, 1),
+    "start_date": datetime(2019, 8, 19),
     #"email": ["chaid@kippchicago.org"],
     "email_on_failure": True,
     "email_on_retry": False,
@@ -87,7 +87,7 @@ default_args = {
 ep_template = {'sdt' : '{{ ds }}'}
 
 dag = DAG(
-    "silo_dl_daily_behavior",
+    "silo_dl_daily_behavior_2019-08-19",
     default_args=default_args,
     schedule_interval='43 1 * * *',
     catchup = True)

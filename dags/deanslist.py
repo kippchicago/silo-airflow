@@ -201,7 +201,7 @@ Airflow specific DAG set up #
 default_args = {
     "owner": "airflow",
     "depends_on_past": False,
-    "start_date": datetime(2018, 9, 12),
+    "start_date": datetime(2019, 08, 26),
     "email": ["chaid@kippchicago.org"],
     "email_on_failure": True,
     "email_on_retry": False,
@@ -215,7 +215,7 @@ default_args = {
 }
 
 dag = DAG(
-    "dl_daily_endpoints",
+    "dl_daily_endpoints_2019-08-26",
     default_args=default_args,
     schedule_interval='51 12 * * *')
 

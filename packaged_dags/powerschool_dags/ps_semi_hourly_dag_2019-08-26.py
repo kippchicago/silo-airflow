@@ -29,7 +29,7 @@ client_secret = Variable.get("ps_client_secret")
 credentials_concat = '{0}:{1}'.format(client_id, client_secret)
 CREDENTIALS_ENCODED = base64.b64encode(credentials_concat.encode('utf-8'))
 
-endpoints = [{"table_name":"attendance","query_expression":"yearid==28","projection":"dcid,id,attendance_codeid,calendar_dayid,schoolid,yearid,studentid,ccid,periodid,parent_attendanceid,att_mode_code,att_comment,att_interval,prog_crse_type,lock_teacher_yn,lock_reporting_yn,transaction_type,total_minutes,att_date,ada_value_code,ada_value_time,adm_value,programid,att_flags,whomodifiedid,whomodifiedtype,ip_address"}]
+endpoints = [{"table_name":"attendance","query_expression":"yearid==29","projection":"dcid,id,attendance_codeid,calendar_dayid,schoolid,yearid,studentid,ccid,periodid,parent_attendanceid,att_mode_code,att_comment,att_interval,prog_crse_type,lock_teacher_yn,lock_reporting_yn,transaction_type,total_minutes,att_date,ada_value_code,ada_value_time,adm_value,programid,att_flags,whomodifiedid,whomodifiedtype,ip_address"}]
 
 
 #################################
@@ -39,7 +39,7 @@ endpoints = [{"table_name":"attendance","query_expression":"yearid==28","project
 default_args = {
     "owner": "airflow",
     "depends_on_past": False,
-    "start_date": datetime(2019, 5, 19),
+    "start_date": datetime(2019, 8, 26),
     "email": ["chaid@kippchicago.org"],
     "email_on_failure": True,
     "email_on_retry": False,
@@ -53,7 +53,7 @@ default_args = {
 }
 
 dag = DAG(
-    "silo_ps_semi_hourly_endpoints_2019-05-20",
+    "silo_ps_semi_hourly_endpoints_2019-08-26",
     default_args=default_args,
     schedule_interval='0 0/4 * * *'
 )
