@@ -54,7 +54,7 @@ def datetime_range(start=None, end=None):
         yield start + timedelta(days=i)
 
 end_date = datetime.today()
-start_date = datetime(2018, 8, 20)
+start_date = datetime(2019, 8, 19)
 
 execution_dates = list((datetime_range(start=start_date, end=end_date)))
 

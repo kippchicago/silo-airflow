@@ -193,7 +193,7 @@ default_args = {
 
 
 dag = DAG(
-    "dl_master_attendance_weekly_refresh",
+    "dl_master_attendance_weekly_refresh_2019-09-13",
     default_args=default_args,
     schedule_interval='0 6 * * 0',
     catchup = True)
@@ -214,7 +214,7 @@ with dag:
             yield start + timedelta(days=i)
 
     end_date = datetime.today()
-    start_date = datetime(2018, 8 ,20)
+    start_date = datetime(2019, 8 ,19)
 
     execution_dates = list((datetime_range(start=start_date, end=end_date)))
 

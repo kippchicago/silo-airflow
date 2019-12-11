@@ -1,4 +1,4 @@
-from __future__ import division, unicode_literals
+#from __future__ import division, unicode_literals
 
 from datetime import datetime, timedelta, date
 
@@ -27,7 +27,7 @@ DAG for checking NWEA  and then updating IDEA2 NWEA data
 default_args = {
     "owner": "airflow",
     "depends_on_past": False,
-    "start_date": datetime(2018, 11, 23),
+    "start_date": datetime(2019, 12, 5),
     "email": ["chaid@kippchicago.org"],
     "email_on_failure": True,
     "email_on_retry": False,
@@ -42,7 +42,7 @@ default_args = {
 
 
 dag = DAG(
-    "idea_update_map_2018-11-24",
+    "idea_update_map_2019-12-05",
     default_args=default_args,
     schedule_interval='0 10 * * *',
     catchup = False)

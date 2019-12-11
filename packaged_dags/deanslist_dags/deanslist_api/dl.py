@@ -105,8 +105,11 @@ def get_endpoint(endpoint, save_path, base_url, api_keys, **context):
      ## download data
     logging.info('GET {0} {1}'.format(ep_name, ep_params))
     table_data = get_table_data(ep_url, ep_params, api_keys)
-    row_count = len(table_data)
+    row_count = len(table_data) or 0
     logging.info('\t{} rows'.format(row_count))
+
+    if row_count is None:
+        row_count = 0
 
     if row_count > 0:
         ## save data as JSON file
@@ -158,7 +161,7 @@ def get_master_attendance(save_path, base_url, api_keys, templates_dict, **conte
 
 def row_count_branch(pushing_task_id, gcs_task_id, zero_branch_task_id, **context):
     task_instance = context['task_instance']
-    row_count = task_instance.xcom_pull(task_ids=pushing_task_id, key = 'dl_row_count')
+    row_count = task_instance.xcom_pull(task_ids=pushing_task_id, key = 'dl_row_count') or 0
 
     logging.info("row count is: {}".format(row_count))
     if row_count > 0:

@@ -5,6 +5,7 @@ from pandas_gbq import read_gbq
 import numpy as np
 import os
 import datetime
+import pytz
 import json
 
 
@@ -113,9 +114,19 @@ class CreateAttendStudentOperator(BaseOperator):
         logging.info("Reading att_code.feather")
         att_code = feather.read_dataframe("{0}/att_code.feather".format(path))
 
+
+
+
+
         logging.info("Reading membership.feather")
         membership = feather.read_dataframe("{0}/membership.feather".format(path))
-        membership = membership[membership.date <= pd.datetime.today()]
+
+
+        logging.info("Getting dates less then or equal to today from membership")
+        today = datetime.datetime.now(pytz.utc)
+
+
+        membership = membership[membership.date <= today]
 
         logging.info("Reading students.feather")
         students = feather.read_dataframe("{0}/students.feather".format(path))
@@ -157,10 +168,11 @@ class CreateAttendStudentOperator(BaseOperator):
                                                         ~pd.isna(member_att.att_code)),
                                           0,
                                           member_att.enrolled)
-        member_att['present'] = np.where(pd.isna(member_att.att_code), 1, 0)
+
+        member_att['present'] = np.where(np.logical_or(pd.isna(member_att.att_code), member_att.att_code=="") , 1, 0)
         member_att['present'] = np.where(member_att.att_code.isin(['A', 'S']), 0, member_att.present)
         member_att['present'] = np.where(member_att.att_code=='H', 0.5, member_att.present)
-        member_att['present'] = np.where(member_att.att_code.isin(["T", "E"]), 1, member_att.present)
+        member_att['present'] = np.where(member_att.att_code.isin(["T", "E","I", "L"]), 1, member_att.present)
         member_att['present'] = np.where(pd.isna(member_att.present), 1, member_att.present)
         member_att['absent'] = (1-member_att.present)*member_att.enrolled
 
