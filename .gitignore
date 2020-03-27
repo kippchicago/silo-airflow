@@ -15,7 +15,7 @@ state.json
 *.csv
 *.Rda
 
-# data folder's conntents
+# data folder's contents
 data/*
 
 #system files

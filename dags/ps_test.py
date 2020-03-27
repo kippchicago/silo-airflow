@@ -56,6 +56,21 @@ def get_access_token(base_url=BASE_URL, credentials_encoded=CREDENTIALS_ENCODED)
     access_json['timestamp'] = str(access_token_timestamp)
     return access_json
 
+def get_state(state_filepath, **context):
+    if os.path.isfile(state_filepath):
+        with open(state_filepath) as file:
+            state = json.load(file)
+
+    else:
+        state = get_access_token()
+        with open(state_filepath, 'w+') as file:
+            json.dump(state, file)
+
+    task_instance = context['task_instance']
+    task_instance.xcom_push('state', state)
+
+    #return state
+
 
 def build_auth_headers(credentials_encoded, state_filepath, **context):
     """
@@ -65,6 +80,8 @@ def build_auth_headers(credentials_encoded, state_filepath, **context):
     """
     ## parse access_token variables
     task_instance = context['task_instance']
+    
+    # highlight
     state = task_instance.xcom_pull('get_state', key='state')
 
     access_token_saved = state['access_token']
@@ -93,21 +110,6 @@ def build_auth_headers(credentials_encoded, state_filepath, **context):
 
     #return auth_headers
 
-
-def get_state(state_filepath, **context):
-    if os.path.isfile(state_filepath):
-        with open(state_filepath) as file:
-            state = json.load(file)
-
-    else:
-        state = get_access_token()
-        with open(state_filepath, 'w+') as file:
-            json.dump(state, file)
-
-    task_instance = context['task_instance']
-    task_instance.xcom_push('state', state)
-
-    #return state
 
 
 '''

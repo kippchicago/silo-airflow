@@ -9,3 +9,5 @@ google-api-python-client
 feather-format
 numpy
 pytz
+scrapy
+selenium

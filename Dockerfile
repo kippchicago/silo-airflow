@@ -24,9 +24,6 @@ ENV LC_ALL en_US.UTF-8
 ENV LC_CTYPE en_US.UTF-8
 ENV LC_MESSAGES en_US.UTF-8
 
-
-
-
 RUN set -ex \
     && buildDeps=' \
         freetds-dev \
@@ -60,6 +57,8 @@ RUN set -ex \
     && pip install ndg-httpsclient \
     && pip install pyasn1 \
     && pip install psycopg2-binary \
+    && pip install scrapy \
+    && pip install selenium \
     ##&& pip install apache-airflow[crypto,celery,postgres,hive,jdbc,mysql,ssh${AIRFLOW_DEPS:+,}${AIRFLOW_DEPS}]==${AIRFLOW_VERSION} \
     && pip install apache-airflow[celery,hive,jdbc,ssh${AIRFLOW_DEPS:+,}${AIRFLOW_DEPS}]==$AIRFLOW_VERSION \
     && pip install 'redis>=2.10.5,<3' \
@@ -73,6 +72,11 @@ RUN set -ex \
     && apt-get purge --auto-remove -yqq $buildDeps \
     && apt-get autoremove -yqq --purge \
     && apt-get clean \
+    && curl https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -o /chrome.deb \
+    && dpkg -i /chrome.deb || apt-get install -yf \
+    && rm /chrome.deb \
+    && curl https://chromedriver.storage.googleapis.com/81.0.4044.69/chromedriver_linux64.zip -o /usr/local/bin/chromedriver \
+    && chmod +x /usr/local/bin/chromedriver \
     && rm -rf \
         /var/lib/apt/lists/* \
         /tmp/* \
