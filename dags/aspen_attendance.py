@@ -195,29 +195,28 @@ default_args = {
     "email": ["mberrien@kippchicago.org"],
     # "email_on_failure": False,
     # "email_on_retry": False,
-    # "retries": 1,
-    # "retry_delay": timedelta(minutes=1),
+    "retries": 1,
+    "retry_delay": timedelta(minutes=1),
     "provide_context": True
 }
 
 dag = DAG(
-    "pull_aspen_attendance",
+    "pull_aspen_attendance_3",
     default_args=default_args,
     schedule_interval=('30 12 * * *'))
 
+with dag:
+    start = DummyOperator(task_id = "start_task")
 
-start = DummyOperator(task_id = "start_task", dag=dag)
+    # get_attendance = PythonOperator(task_id = "attendance_pull",
+    #                                 python_callable=download_attendance,
+    #                                 op_args = [BASE_URL, ASPEN_USERNAME,
+    #                                            ASPEN_PASSWORD, SCHOOL,
+    #                                            local_downloads, date])
 
-# get_attendance = PythonOperator(task_id = "attendance_pull",
-#                                 python_callable=download_attendance,
-#                                 op_args = [BASE_URL, ASPEN_USERNAME,
-#                                            ASPEN_PASSWORD, SCHOOL,
-#                                            local_downloads, date])
-
-t2 = PythonOperator(task_id = "sleepy",
-                    python_callable=my_sleeping_function,
-                    op_kwargs={'minutes': 1},
-                    dag=dag)
+    t2 = PythonOperator(task_id = "sleepy",
+                        python_callable=my_sleeping_function,
+                        op_kwargs={'minutes': 1})
 
 # end = DummyOperator(task_id="end_task", dag=dag)
 
