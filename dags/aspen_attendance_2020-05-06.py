@@ -68,4 +68,7 @@ with dag:
 
     t_end = DummyOperator(task_id = "end_aspen_attendance_pull")
 
-    t_start >> t_update_aspen_attendance_ascend >> t_update_aspen_attendance_academy >> t_update_aspen_attendance_bloom >> t_update_aspen_attendance_one >> t_end
+    t_start >> t_update_aspen_attendance_ascend >> t_end
+    t_start >> t_update_aspen_attendance_academy >> t_end
+    t_start >> t_update_aspen_attendance_bloom >> t_end
+    t_start >> t_update_aspen_attendance_one >> t_end
