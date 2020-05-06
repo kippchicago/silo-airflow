@@ -355,7 +355,7 @@ ENDPOINT_PATH = '{0}/gcs/data/endpoints/{1}.json'.format(home, endpoint_name)
 default_args = {
     "owner": "airflow",
     "depends_on_past": False,
-    "start_date": datetime(2018, 07, 23),
+    "start_date": datetime(2018, 7, 23),
     "email": ["airflow@airflow.com"],
     "email_on_failure": False,
     "email_on_retry": False,

@@ -201,7 +201,7 @@ Airflow specific DAG set up #
 default_args = {
     "owner": "airflow",
     "depends_on_past": False,
-    "start_date": datetime(2019, 08, 26),
+    "start_date": datetime(2019, 8, 26),
     "email": ["chaid@kippchicago.org"],
     "email_on_failure": True,
     "email_on_retry": False,
