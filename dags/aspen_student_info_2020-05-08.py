@@ -14,7 +14,7 @@ DAG for scraping Aspen Student Information from https://aspen.cps.edu/
 default_args = {
     "owner": "airflow",
     "depends_on_past": False,
-    "start_date": datetime(2020, 5, 8),
+    "start_date": datetime(2020, 5, 2),
     "email": ["mberrien@kippchicago.org"],
     "email_on_failure": True,
     "email_on_retry": False,
@@ -26,7 +26,7 @@ default_args = {
 dag = DAG(
     "aspen_student_info_2020-05-08",
     default_args=default_args,
-    schedule_interval='0 15 * * *',
+    schedule_interval='0 * * * 0',
     catchup = False)
 
 with dag:
