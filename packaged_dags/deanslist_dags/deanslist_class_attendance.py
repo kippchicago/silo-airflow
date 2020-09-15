@@ -58,7 +58,7 @@ default_args = {
     "owner": "airflow",
     "depends_on_past": False,
     "start_date": datetime(2019, 8, 19),
-    #"email": ["chaid@kippchicago.org"],
+    "email": ["mberrien@kippchicago.org"],
     "email_on_failure": True,
     "email_on_retry": False,
     "retries": 2,
@@ -73,7 +73,7 @@ default_args = {
 ep_template = {'sdt' : '{{ ds }}'}
 
 dag = DAG(
-    "silo_dl_daily_attendance_2019-08-19",
+    "silo_dl_class_attendance_2020-08-28",
     default_args=default_args,
     schedule_interval='0 3 * * *',
     catchup = True)
@@ -83,7 +83,7 @@ with dag:
     t1 = DummyOperator(task_id = "start_dl")
 
 
-    endpoint_name = 'daily_attendance'
+    endpoint_name = 'class_attendance'
     get_enpdpoints_task_id = "get_{0}_dl_endpoint".format(endpoint_name)
     branch_task_id = "branch_row_count_{0}_dl".format(endpoint_name)
     file_to_gcs_task_id = "{0}_to_gcs".format(endpoint_name)
@@ -92,7 +92,7 @@ with dag:
 
     t2 = PythonOperator(
             task_id = get_enpdpoints_task_id,
-            python_callable = get_endpoint_with_dates,
+            python_callable = get_class_attendance,
             op_args = [SAVE_PATH, BASE_URL, API_KEYS],
             templates_dict = ep_template
             )
