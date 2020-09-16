@@ -1,6 +1,7 @@
 # The first step os to follow Charlie Bini's lead [here](https://github.com/TEAMSchools/sync_deanslist).
 #
-# However, we will combine this into one file rather than a module and a scipt file since we will be using Airflow, it will be easier to maintain in a single file.
+# However, we will combine this into one file rather than a module and a scipt file since we will be
+# using Airflow, it will be easier to maintain in a single file.
 #
 # The first chunk comes from the config file. You'll need the following for the config:
 # * `save_path`: where the data pulled from the DL API will be stored locally
@@ -34,7 +35,6 @@ from airflow.contrib.operators.file_to_gcs import FileToGoogleCloudStorageOperat
 from airflow.models import Variable
 
 
-
 home = expanduser("~")
 
 SAVE_PATH = '{0}/gcs/data/deanslist/'.format(home)
@@ -42,6 +42,7 @@ SAVE_PATH = '{0}/gcs/data/deanslist/'.format(home)
 """
 Functions
 """
+
 def get_table_data(endpoint_url, endpoint_params, api_keys, **context):
     """
     gets data at endpoint
@@ -159,41 +160,12 @@ def get_endpoint(endpoint, save_path, base_url, api_keys, **context):
 def get_endpoint_with_dates(save_path, base_url, api_keys, templates_dict, **context):
 
     start_date = templates_dict['sdt']
+    end_date = templates_dict['sdt']
 
 
     ep = {'endpoint':'/api/v1/daily-attendance',
            'name':'daily-attendance',
-           'params':{'sdt': start_date, 'edt': start_date, 'include_iac':'Y'}}
-
-
-    logging.info('Endpoint is: {}'.format(ep))
-
-
-    get_endpoint(ep , save_path, base_url, api_keys, **context)
-
-def get_master_attendance(save_path, base_url, api_keys, templates_dict, **context):
-
-    start_date = templates_dict['sdt']
-
-
-    ep = {'endpoint':'/api/i/behavior/get-master-attendance.php',
-           'name':'master-attendance',
-           'params':{'sdt': start_date, 'edt': start_date, 'include_iac':'Y'}}
-
-
-    logging.info('Endpoint is: {}'.format(ep))
-
-
-    get_endpoint(ep , save_path, base_url, api_keys, **context)
-
-def get_class_attendance(save_path, base_url, api_keys, templates_dict, **context):
-
-    start_date = templates_dict['sdt']
-
-
-    ep = {'endpoint':'/api/v1/class-attendance',
-           'name':'class-attendance',
-           'params':{'sdt': start_date, 'edt': start_date, 'include_iac':'Y'}}
+           'params':{'sdt': start_date, 'edt': end_date, 'include_iac':'Y'}}
 
 
     logging.info('Endpoint is: {}'.format(ep))
@@ -211,6 +183,7 @@ def row_count_branch(pushing_task_id, gcs_task_id, zero_branch_task_id, **contex
         return gcs_task_id
     else:
         return zero_branch_task_id
+
 
 """
 DeansList variables
@@ -230,7 +203,7 @@ Airflow specific DAG set up #
 default_args = {
     "owner": "airflow",
     "depends_on_past": False,
-    "start_date": datetime(2020, 8, 24),
+    "start_date": datetime(2020, 9, 15),
     "email": ["mberrien@kippchicago.org"],
     "email_on_failure": True,
     "email_on_retry": False,
@@ -243,10 +216,10 @@ default_args = {
     # 'end_date': datetime(2019, 6, 2014),
 }
 
-ep_template = {'sdt' : '{{ ds }}'}
+ep_template6 = {'sdt': (date.today() - timedelta(days=6)).strftime('%Y-%m-%d')}
 
 dag = DAG(
-    "silo_dl_class_attendance_2020-09-02",
+    "silo_dl_daily_attendance_seven-day-window6",
     default_args=default_args,
     schedule_interval='0 3 * * *',
     catchup = True)
@@ -256,7 +229,7 @@ with dag:
     t1 = DummyOperator(task_id = "start_dl")
 
 
-    endpoint_name = 'class_attendance'
+    endpoint_name = 'daily_attendance'
     get_enpdpoints_task_id = "get_{0}_dl_endpoint".format(endpoint_name)
     branch_task_id = "branch_row_count_{0}_dl".format(endpoint_name)
     file_to_gcs_task_id = "{0}_to_gcs".format(endpoint_name)
@@ -264,11 +237,11 @@ with dag:
 
 
     t2 = PythonOperator(
-            task_id = get_enpdpoints_task_id,
-            python_callable = get_class_attendance,
-            op_args = [SAVE_PATH, BASE_URL, API_KEYS],
-            templates_dict = ep_template
-            )
+                task_id = get_enpdpoints_task_id,
+                python_callable = get_endpoint_with_dates,
+                op_args = [SAVE_PATH, BASE_URL, API_KEYS],
+                templates_dict = ep_template6
+                )
 
     t_branch = BranchPythonOperator(
         task_id = branch_task_id,
@@ -289,6 +262,7 @@ with dag:
     t_zero_row = DummyOperator(
         task_id =zero_branch_task_id
         )
+
 
     t2.set_upstream(t1)
     t2.set_downstream(t_branch)
